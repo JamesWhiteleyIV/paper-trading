@@ -1,2 +1,2 @@
-# command-line-paper-trading
+# paper-trading
 Command line tool used to simulate stock market investing.
