@@ -1,14 +1,16 @@
 import sys
 import os.path
 import re
+import portfolio as port
 
 class Paper_Trading():
    ''' main menu functionality to call Portfolio class '''
 
    def __init__(self):
       ''' init a portfolio and set the current portfolio '''
-      self.cur_port = None
       self.DIR = os.path.join(os.path.dirname(__file__), 'portfolios')
+      self.cur_port = None  #portfolio filename with .pkl extension
+      self.port = None #Portfolio object
 
       #get list of portfolio names if they exist
       pkl_files = self._get_all_pkl_files()
@@ -23,9 +25,10 @@ class Paper_Trading():
          '0': self._exit,
          '1': self._create_portfolio,
          '2': self._switch_portfolio,
-         '3': self._buy_stock,
-         '4': self._sell_stock,
-         '5': self._rm_stock
+         '3': self.port.buy_stock,
+         '4': self.port.sell_stock,
+         '5': self.port.show_portfolio,
+         '6': self.port.show_past_trades,
       }
 
    def _get_all_pkl_files(self):
@@ -46,9 +49,12 @@ class Paper_Trading():
       sys.exit(0)
 
    def _set_portfolio(self, portfolio):
-      ''' Sets self.cur_port '''
+      ''' Sets self.cur_port and current Portfolio object '''
       self.cur_port = portfolio
-      print 'Using portfolio: ', self.cur_port
+      name = self.cur_port.split('.')[0]
+      print 'Using portfolio: ', name 
+      full_path =  os.path.join(self.DIR, self.cur_port)
+      self.port = port.Portfolio(full_path)
 
    def _create_portfolio(self):
       ''' Create a new portfolio as .pkl file '''
@@ -64,35 +70,23 @@ class Paper_Trading():
       ''' Change current portfolio self.cur_port '''
       # for pkl files in portfolios/
       # create dict, show choices then switch based on option
-      print 'Which portfolio would you like to use?'
       pkl_files = self._get_all_pkl_files()
-      options = {}
-      i = 1
-      for f in pkl_files:
-         options[str(i)] = f
-         i += 1
-      for key in options:
-         print key, '-', options[key]
-      choice = raw_input('> ')
-      while choice not in options:
-         print 'Invalid option.'
+      if len(pkl_files) <= 1:
+         print "There is no other portfolio to switch to."
+      else:
+         print 'Which portfolio would you like to use?'
+         options = {}
+         i = 1
+         for f in pkl_files:
+            options[str(i)] = f.split('.')[0]
+            i += 1
+         for key in options:
+            print key, '-', options[key]
          choice = raw_input('> ')
-      self._set_portfolio(options[choice])
-      
-      
-   def _buy_stock(self):
-      ''' add a new stock to portfolio '''
-      print 'buy stock'
-
-   def _sell_stock(self):
-      ''' sell a stock from portfolio '''
-      # if # investments in portfolio < 1, return
-      print 'sell stock'
-
-   def _rm_stock(self):
-      ''' remove a stock from portfolio completely '''
-      # if # investments in portfolio < 1, return
-      print 'rm stock'
+         while choice not in options:
+            print 'Invalid option.'
+            choice = raw_input('> ')
+         self._set_portfolio(options[choice]+'.pkl')
 
    def _select_option(self, option):
       ''' call a function from dict '''
@@ -101,23 +95,25 @@ class Paper_Trading():
       except SystemExit as e:
          pass
       except:
-         print 'invalid option'
+         print 'Invalid option'
       
    def start(self):
       ''' displays menu '''
       choice = None
       while (choice != '0'):
          print '---------------------------'
+         print "Portfolio value: ", self.port.data['cur_value']
+         print "Portfolio cash: ", self.port.data['cash']
          print 'Enter a number:'
          print '0 - Exit'
          print '1 - Create new portfolio'
          print '2 - Switch portfolio'
          print '3 - Buy stock'
          print '4 - Sell stock'
-         print '5 - Remove stock'
+         print '5 - Show Portfolio'
+         print '6 - Show Past Trades'
          choice = raw_input('> ')
          self._select_option(choice)
-
 
 
 if __name__ == '__main__':
