@@ -1,0 +1,16 @@
+certifi==2017.11.5
+chardet==3.0.4
+DateTime==4.2
+idna==2.6
+numpy==1.13.3
+pandas==0.21.0
+pandas-datareader==0.5.0
+python-dateutil==2.6.1
+pytz==2017.3
+requests==2.18.4
+requests-file==1.4.2
+requests-ftp==0.3.1
+six==1.11.0
+tabulate==0.8.2
+urllib3==1.22
+zope.interface==4.4.3

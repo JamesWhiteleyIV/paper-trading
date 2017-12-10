@@ -102,8 +102,6 @@ class Paper_Trading():
       choice = None
       while (choice != '0'):
          print '---------------------------'
-         print "Portfolio value: ", self.port.data['cur_value']
-         print "Portfolio cash: ", self.port.data['cash']
          print 'Enter a number:'
          print '0 - Exit'
          print '1 - Create new portfolio'
@@ -114,6 +112,7 @@ class Paper_Trading():
          print '6 - Show Past Trades'
          choice = raw_input('> ')
          self._select_option(choice)
+         print '---------------------------'
 
 
 if __name__ == '__main__':
