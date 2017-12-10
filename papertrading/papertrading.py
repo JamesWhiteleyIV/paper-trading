@@ -2,6 +2,7 @@ import sys
 import os.path
 import re
 import portfolio as port
+from tabulate import tabulate
 
 class Paper_Trading():
    ''' main menu functionality to call Portfolio class '''
@@ -29,6 +30,8 @@ class Paper_Trading():
          '4': self.port.sell_stock,
          '5': self.port.show_portfolio,
          '6': self.port.show_past_trades,
+         '7': self.port.add_price_target,
+         '8': self.port.add_stop_loss,
       }
 
    def _get_all_pkl_files(self):
@@ -101,20 +104,21 @@ class Paper_Trading():
       ''' displays menu '''
       choice = None
       while (choice != '0'):
-         print '---------------------------'
-         print 'Enter a number:'
-         print '0 - Exit'
-         print '1 - Create new portfolio'
-         print '2 - Switch portfolio'
-         print '3 - Buy stock'
-         print '4 - Sell stock'
-         print '5 - Show Portfolio'
-         print '6 - Show Past Trades'
+         print tabulate([['0 - Exit'],
+            ['1 - Create new portfolio'],
+            ['2 - Switch portfolio'],
+            ['3 - Buy stock'],
+            ['4 - Sell stock'],
+            ['5 - Show Portfolio'],
+            ['6 - Show Past Trades'],
+            ['7 - Add Price Target'],
+            ['8 - Add Stop Loss'],
+            ], tablefmt="fancy_grid")
          choice = raw_input('> ')
          self._select_option(choice)
-         print '---------------------------'
 
 
 if __name__ == '__main__':
    pt = Paper_Trading()
    pt.start()
+

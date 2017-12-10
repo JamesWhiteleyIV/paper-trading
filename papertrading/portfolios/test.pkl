@@ -1,0 +1,17 @@
+(dp0
+S'start_value'
+p1
+F999999.0
+sS'next_id'
+p2
+I1
+sS'stocks'
+p3
+(lp4
+sS'cur_value'
+p5
+F999999.0
+sS'cash'
+p6
+F999999.0
+s.
