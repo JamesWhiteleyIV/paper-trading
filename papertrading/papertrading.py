@@ -81,7 +81,7 @@ class Paper_Trading():
       # create dict, show choices then switch based on option
       pkl_files = self._get_all_pkl_files()
       if len(pkl_files) <= 1:
-         print colors.red + "There is no other portfolio to switch to." colors.end
+         print colors.red + "There is no other portfolio to switch to." + colors.end
       else:
          print 'Which portfolio would you like to use?'
          options = {}
