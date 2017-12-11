@@ -102,3 +102,6 @@ ENV/
 
 # virtual env
 /papertradingenv
+
+#pickle files
+.pkl

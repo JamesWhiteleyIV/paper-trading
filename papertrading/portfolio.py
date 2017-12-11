@@ -277,10 +277,10 @@ class Portfolio():
                   stock.data['shares'], stock.data['start_value'],  stock.data['cur_value'], stock.data['total_gain'],   
                   ])
          print 'Current Holdings'
-         print tabulate(tab_data,  headers=['ID', 'Ticker', 'Buy Date', 'Buy Price', 'Cur Price', 'Price Target', 'Stop Loss', 'Shares', 'Start Value', 'Cur Value', 'Total Gain %'], tablefmt="fancy_grid")
+         print tabulate(tab_data,  headers=['ID', 'Ticker', 'Buy Date', 'Buy Price', 'Cur Price', 'Price Target', 'Stop Loss', 'Shares', 'Start Value', 'Cur Value', 'Total Gain %'], tablefmt="fancy_grid", floatfmt=(".2f"))
          tabs = [ 
             ['Total Portfolio Value: $', self.data['cur_value']], ['Available Cash: $', self.data['cash']], ['Total Portfolio Gain:', (self.data['cur_value'] / self.data['start_value'] - 1.0) * 100.0  ]]
-         print tabulate(tabs, tablefmt="fancy_grid")
+         print tabulate(tabs, tablefmt="fancy_grid", floatfmt=(".2f"))
 
 
    def show_past_trades(self):
@@ -296,7 +296,7 @@ class Portfolio():
                   stock.data['shares'], stock.data['start_value'],  stock.data['cur_value'], stock.data['total_gain'],   
                   ])
          print 'Past Trades'
-         print tabulate(tab_data,  headers=['ID', 'Ticker', 'Buy Date', 'Sell Date', 'Buy Price', 'Sell Price', 'Shares', 'Start Value', 'End Value', 'Total Gain %'], tablefmt="fancy_grid")
+         print tabulate(tab_data,  headers=['ID', 'Ticker', 'Buy Date', 'Sell Date', 'Buy Price', 'Sell Price', 'Shares', 'Start Value', 'End Value', 'Total Gain %'], tablefmt="fancy_grid", floatfmt=(".2f"))
 
 
    def update(self):

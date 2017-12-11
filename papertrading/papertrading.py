@@ -12,6 +12,7 @@ class Paper_Trading():
       self.DIR = os.path.join(os.path.dirname(__file__), 'portfolios')
       self.cur_port = None  #portfolio filename with .pkl extension
       self.port = None #Portfolio object
+      self.options = None #initialized in _set_portfolio
 
       #get list of portfolio names if they exist
       pkl_files = self._get_all_pkl_files()
@@ -22,6 +23,9 @@ class Paper_Trading():
       else: #multiple portfolio's, ask which to use
          self._switch_portfolio()
 
+
+   def _set_options(self):
+      ''' used to reset options for new portfolio '''
       self.options = {
          '0': self._exit,
          '1': self._create_portfolio,
@@ -52,12 +56,13 @@ class Paper_Trading():
       sys.exit(0)
 
    def _set_portfolio(self, portfolio):
-      ''' Sets self.cur_port and current Portfolio object '''
+      ''' Sets self.cur_port and current Portfolio object self.port '''
       self.cur_port = portfolio
       name = self.cur_port.split('.')[0]
       print 'Using portfolio: ', name 
       full_path =  os.path.join(self.DIR, self.cur_port)
       self.port = port.Portfolio(full_path)
+      self._set_options()
 
    def _create_portfolio(self):
       ''' Create a new portfolio as .pkl file '''
