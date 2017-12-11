@@ -103,7 +103,8 @@ class Paper_Trading():
          self.options[option]()
       except SystemExit as e:
          pass
-      except:
+      except Exception as e:
+         print e
          print colors.red + 'Invalid option' + colors.end
       
    def start(self):

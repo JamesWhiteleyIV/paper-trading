@@ -31,15 +31,6 @@ class Stock():
                 "stop_loss_set_date": None,
                 }
 
-
-   def _has_sl(self):
-      ''' returns true if a stop loss is set '''
-      return self.data['stop_loss']
-
-   def _has_pt(self):
-      ''' returns true if a price target is set '''
-      return self.data['price_target']
-
    def _get_buy_price(self, ticker):       
       ''' returns buy price for stock, will get last available price if market not open '''
       buy_date = dt.date.today()
@@ -87,7 +78,7 @@ class Stock():
       ''' updates cur_price, cur_value, and total_gain '''
       try:
            #checks if price target or stop loss have been hit
-           self._check_sell(self.has_pt, self._has_sl)
+           self._check_sell()
            if not self.data['is_sold']: #stop loss and price target not hit
               end = dt.date.today()
               start = end - relativedelta(days=10)
@@ -101,14 +92,12 @@ class Stock():
            print e
 
 
-   def _check_sell(self, pt, sl):
+   def _check_sell(self):
       ''' checks if price target or stop loss has been hit since it was set '''
+      pt = self.data['price_target']
+      sl = self.data['stop_loss']
       if not pt and not sl:
-         return False #no price target or stop loss set, don't check sell
-      '''
-      if dt.date.today() - self.data['buy_date'] == 0: # stock was bought today, don't check sell
-         return False
-      '''
+         return #no price target or stop loss set, don't check sell
       pt_date = None 
       sl_date = None 
       try:
@@ -116,7 +105,7 @@ class Stock():
       except: #not enough data to calculate
          print 'invalid date range'
          return
-      if pt:  #get all dates where pt was hit since pt was set 
+      if pt and (dt.date.today() - self.data['price_target_set_date']).days > 0:  #get all dates where pt was hit since pt was set , must have at least one holding day 
          try:
             pt_set_date = self.data['price_target_set_date'] 
             pt_dates = prices[prices['High'] > pt]
@@ -124,7 +113,7 @@ class Stock():
             pt_date = pt_dates.index[0]
          except Exception as e:
             print e
-      if sl:  #get all dates where sl was hit since sl was set  
+      if sl and (dt.date.today() - self.data['stop_loss_set_date']).days > 0:  #get all dates where sl was hit since sl was set  
          try:
             sl_set_date = self.data['stop_loss_set_date'] 
             sl_dates = prices[prices['Low'] < sl]
@@ -226,32 +215,47 @@ class Portfolio():
 
    def buy_stock(self):
       ''' adds stock to portfolio current date '''
-      success = None
-      while not success:
-         try:
-            ticker = str(raw_input('Enter Ticker: '))
-            shares = int(raw_input('Enter # Shares: '))
-         except ValueError:
-            print "Invalid input."
-         else:
-            ticker = ticker.upper()
-            new_stock = Stock(ticker, shares)
-            new_stock.data['id'] = self.data['next_id']
-            if self.data['cash'] < new_stock.data['cur_value']: #not enough money in portfolio
-               print colors.red + "Not enough cash to buy stock." + colors.end
+      day_of_week = dt.date.today().weekday()
+      cur_time = dt.datetime.now().time()
+      if day_of_week >= 5: # 5 and 6 == sat and sun, market closed
+         print colors.red + "Market Closed" + colors.end
+      elif cur_time <= dt.time(6, 30) or cur_time >= dt.time(13,00):
+         print cur_time <= dt.time(6, 30)
+         print cur_time >= dt.time(13,00)
+         print colors.red + "Market Closed" + colors.end
+      else:
+         success = None
+         while not success:
+            try:
+               ticker = str(raw_input('Enter Ticker: '))
+               shares = int(raw_input('Enter # Shares: '))
+            except ValueError:
+               print "Invalid input."
             else:
-               self.data['next_id'] += 1
-               self.data['cash'] -= new_stock.data['cur_value'] 
-               self.data['stocks'].append(new_stock)
-               self._save_port()
-               print colors.green + ticker + " added to portfolio successfully" + colors.end
-            self.last_update = None
-            success = True
+               ticker = ticker.upper()
+               new_stock = Stock(ticker, shares)
+               new_stock.data['id'] = self.data['next_id']
+               if self.data['cash'] < new_stock.data['cur_value']: #not enough money in portfolio
+                  print colors.red + "Not enough cash to buy stock." + colors.end
+               else:
+                  self.data['next_id'] += 1
+                  self.data['cash'] -= new_stock.data['cur_value'] 
+                  self.data['stocks'].append(new_stock)
+                  self._save_port()
+                  print colors.green + ticker + " added to portfolio successfully" + colors.end
+               self.last_update = None
+               success = True
            
 
    def sell_stock(self):
       ''' sells stock from portfolio on current date '''
-      if len(self.data['stocks']) < 1:
+      day_of_week = dt.date.today().weekday()
+      cur_time = dt.datetime.now().time()
+      if day_of_week >= 5: # 5 and 6 == sat and sun, market closed
+         print colors.red + "Market Closed" + colors.end
+      elif cur_time <= dt.time(6, 30) or cur_time >= dt.time(13,00):
+         print colors.red + "Market Closed" + colors.end
+      elif len(self.data['stocks']) < 1:
          print colors.red + "No stocks to sell" + colors.end
       else:
          self.show_portfolio()
@@ -266,7 +270,7 @@ class Portfolio():
                   stock.sell()
                   self.data['cash'] += stock.data['cur_value']
                   self._save_port()
-                  print colors.green + stock.data['ticker'] +  "sold from portfolio successfully" + colors.end
+                  print colors.green + stock.data['ticker'] +  " sold from portfolio successfully" + colors.end
                   return
            
 
@@ -318,7 +322,8 @@ class Portfolio():
             stock.update()
             if stock.data["is_sold"]: #price target or stop loss hit during update
                self.data['cash'] += stock.data['cur_value']
-               print colors.green + stock.data['ticker'] +  "sold from portfolio successfully" + colors.end
+               print 'TESTtestTEST'
+               print colors.green + stock.data['ticker'] +  " sold from portfolio successfully" + colors.end
             else:
                self.data['cur_value'] += stock.data['cur_value']
       self.data['cur_value'] += self.data['cash']
