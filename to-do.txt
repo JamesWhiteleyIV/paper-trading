@@ -1,1 +1,0 @@
-make update function check profit targets and stop loss to trigger an auto sell
