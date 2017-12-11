@@ -38,13 +38,14 @@ NNNI-1
 I-1
 I0
 tp17
-bS'P\x9b\xac8\xb1{\xcb\xbf'
+bS'x\xa4\xdf\x07\xb4\x9c\xd4\xbf'
 p18
 tp19
 Rp20
 sS'stop_loss'
 p21
-NsS'sell_date'
+I100
+sS'sell_date'
 p22
 NsS'buy_price'
 p23
@@ -75,7 +76,7 @@ sS'cur_price'
 p35
 g11
 (g15
-S'\x14\x937\xc0\xcc<g@'
+S'\x8a\xc9\x1b`f6g@'
 p36
 tp37
 Rp38
@@ -97,7 +98,7 @@ sS'cur_value'
 p45
 g11
 (g15
-S'<jL\x88\x99\xf3\x9f@'
+S'\x1e5&\xc4\xcc\xea\x9f@'
 p46
 tp47
 Rp48
@@ -230,7 +231,7 @@ Rp95
 ssbasg45
 g11
 (g15
-S'\x9b3\xa2\xf4\xbci\xf8@'
+S'2\xfb<F\x9di\xf8@'
 p96
 tp97
 Rp98

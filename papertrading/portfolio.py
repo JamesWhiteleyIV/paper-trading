@@ -7,7 +7,7 @@ import numpy as np
 import os
 from tabulate import tabulate
 import time
-
+from colors import colors
 
 class Stock():
    def __init__(self, ticker, shares):
@@ -41,17 +41,17 @@ class Stock():
    def set_sl(self, sl):
       if sl <  self.data['cur_price']:
          self.data['stop_loss'] = sl 
-         print self.data['ticker'], 'stop loss updated successfully' 
+         print colors.green + self.data['ticker'], 'stop loss updated successfully' + colors.end
       else:
-         print "Stop loss must be lower than current price"
+         print colors.red + "Stop loss must be lower than current price" + colors.end
 
 
    def set_pt(self, pt):
       if pt > self.data['cur_price']:
          self.data['price_target'] = pt
-         print self.data['ticker'], 'price target updated successfully' 
+         print colors.green + self.data['ticker'], 'price target updated successfully' + colors.end
       else:
-         print "Price target must be higher than current price"
+         print colors.red + "Price target must be higher than current price" + colors.end
 
    def sell(self):
         '''sells stock on current date, uses most recent  adj close price'''
@@ -204,7 +204,7 @@ class Portfolio():
             print "What would you like the starting value of your portfolio to be?"
             value  = float(raw_input('> '))
          except ValueError:
-            print "You must enter a numeric value."
+            print colors.red + "You must enter a numeric value." + colors.end
          else:
             return value
         
@@ -228,13 +228,13 @@ class Portfolio():
             new_stock = Stock(ticker, shares)
             new_stock.data['id'] = self.data['next_id']
             if self.data['cash'] < new_stock.data['cur_value']: #not enough money in portfolio
-               print "Not enough cash to buy stock."
+               print colors.red + "Not enough cash to buy stock." + colors.end
             else:
                self.data['next_id'] += 1
                self.data['cash'] -= new_stock.data['cur_value'] 
                self.data['stocks'].append(new_stock)
                self._save_port()
-               print ticker, "added to portfolio successfully"
+               print colors.green + ticker + " added to portfolio successfully" + colors.end
             self.last_update = None
             success = True
            
@@ -242,28 +242,28 @@ class Portfolio():
    def sell_stock(self):
       ''' sells stock from portfolio on current date '''
       if len(self.data['stocks']) < 1:
-         print "No stocks to sell"
+         print colors.red + "No stocks to sell" + colors.end
       else:
          self.show_portfolio()
          print "Enter stock ID to sell"
          try:
             choice = int(raw_input('> '))
          except ValueError:
-            print "Invalid input."
+            print colors.red + "Invalid input." + colors.end
          else:
             for stock in self.data['stocks']:
                if stock.data['id'] == choice and not stock.data['is_sold']:
                   stock.sell()
                   self.data['cash'] += stock.data['cur_value']
                   self._save_port()
-                  print stock.data['ticker'], "sold from portfolio successfully"
+                  print colors.green + stock.data['ticker'] +  "sold from portfolio successfully" + colors.end
                   return
            
 
    def show_portfolio(self):
       ''' displays stock holdings '''
       if len(self.data['stocks']) < 1:
-         print "No stocks in portfolio"
+         print colors.red +  "No stocks in portfolio" + colors.end
       else:
          if not self.last_update:
             self.update() #this will update cur_value of portfolio
@@ -286,7 +286,7 @@ class Portfolio():
    def show_past_trades(self):
       ''' displays past holdings '''
       if len(self.data['stocks']) < 1:
-         print "No stocks in portfolio"
+         print colors.red + "No stocks in portfolio" + colors.end
       else:
          tab_data = []
          for stock in self.data['stocks']:
@@ -314,7 +314,7 @@ class Portfolio():
    def add_price_target(self):
       ''' update a stock's price target '''
       if len(self.data['stocks']) < 1:
-         print "No stocks in portfolio"
+         print colors.red + "No stocks in portfolio" + colors.end
       else: 
          self.show_portfolio()
          print "Enter stock ID to add price target"
@@ -322,7 +322,7 @@ class Portfolio():
             choice = int(raw_input('> '))
             pt = int(raw_input('Price Target: '))
          except ValueError:
-            print "Invalid input."
+            print colors.red + "Invalid input." + colors.end
          else:
             for stock in self.data['stocks']:
                if stock.data['id'] == choice and not stock.data['is_sold']:
@@ -334,7 +334,7 @@ class Portfolio():
    def add_stop_loss(self):
       ''' update a stock's stop loss '''
       if len(self.data['stocks']) < 1:
-         print "No stocks in portfolio"
+         print colors.red + "No stocks in portfolio" + colors.end
       else:
          self.show_portfolio()
          print "Enter stock ID to add stop loss"
@@ -342,7 +342,7 @@ class Portfolio():
             choice = int(raw_input('> '))
             sl = int(raw_input('Stop Loss: '))
          except ValueError:
-            print "Invalid input."
+            print colors.red + "Invalid input." + colors.end
          else:
             for stock in self.data['stocks']:
                if stock.data['id'] == choice and not stock.data['is_sold']:

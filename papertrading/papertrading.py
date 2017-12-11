@@ -3,6 +3,7 @@ import os.path
 import re
 import portfolio as port
 from tabulate import tabulate
+from colors import colors
 
 class Paper_Trading():
    ''' main menu functionality to call Portfolio class '''
@@ -69,7 +70,7 @@ class Paper_Trading():
       print 'What would you like to name new portfolio?'
       name = raw_input('> ')
       while not self._valid_filename(name): 
-         print "Invalid name, name must only have letters and numbers."
+         print colors.red + "Invalid name, name must only have letters and numbers." + colors.end
          print 'What would you like to name your portfolio?'
          name = raw_input('> ')
       self._set_portfolio(name + '.pkl')
@@ -80,7 +81,7 @@ class Paper_Trading():
       # create dict, show choices then switch based on option
       pkl_files = self._get_all_pkl_files()
       if len(pkl_files) <= 1:
-         print "There is no other portfolio to switch to."
+         print colors.red + "There is no other portfolio to switch to." colors.end
       else:
          print 'Which portfolio would you like to use?'
          options = {}
@@ -92,7 +93,7 @@ class Paper_Trading():
             print key, '-', options[key]
          choice = raw_input('> ')
          while choice not in options:
-            print 'Invalid option.'
+            print colors.red + 'Invalid option.' + colors.end
             choice = raw_input('> ')
          self._set_portfolio(options[choice]+'.pkl')
 
@@ -103,7 +104,7 @@ class Paper_Trading():
       except SystemExit as e:
          pass
       except:
-         print 'Invalid option'
+         print colors.red + 'Invalid option' + colors.end
       
    def start(self):
       ''' displays menu '''
