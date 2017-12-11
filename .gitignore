@@ -103,5 +103,6 @@ ENV/
 # virtual env
 /papertradingenv
 
-#pickle files
+#pickle and swp files
 .pkl
+.swp
