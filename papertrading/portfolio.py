@@ -220,8 +220,6 @@ class Portfolio():
       if day_of_week >= 5: # 5 and 6 == sat and sun, market closed
          print colors.red + "Market Closed" + colors.end
       elif cur_time <= dt.time(6, 30) or cur_time >= dt.time(13,00):
-         print cur_time <= dt.time(6, 30)
-         print cur_time >= dt.time(13,00)
          print colors.red + "Market Closed" + colors.end
       else:
          success = None
