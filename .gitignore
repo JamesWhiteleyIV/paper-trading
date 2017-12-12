@@ -104,5 +104,5 @@ ENV/
 /papertradingenv
 
 #pickle and swp files
-.pkl
+*.pkl
 .swp
