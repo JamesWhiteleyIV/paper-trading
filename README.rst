@@ -12,3 +12,12 @@ Features
 - Multiple portfolios.
 - Portfolio statistics.
 - An easy-to-read user interface.
+
+Installation
+=============
+Type the following into terminal:
+```
+git clone https://github.com/JamesWhiteleyIV/Paper-Trading.git
+cd Paper-Trading
+pip install -r requirements.txt
+```
