@@ -17,8 +17,12 @@ Installation
 =============
 Type the following into terminal:
 
-``bash
+```bash
+
 git clone https://github.com/JamesWhiteleyIV/Paper-Trading.git
+
 cd Paper-Trading
+
 pip install -r requirements.txt
-``
+
+```
