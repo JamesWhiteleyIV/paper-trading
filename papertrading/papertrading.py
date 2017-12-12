@@ -11,6 +11,9 @@ class Paper_Trading():
    def __init__(self):
       ''' init a portfolio and set the current portfolio '''
       self.DIR = os.path.join(os.path.dirname(__file__), 'portfolios')
+      if not os.path.exists(self.DIR):
+         os.makedirs(self.DIR)
+
       self.cur_port = None  #portfolio filename with .pkl extension
       self.port = None #Portfolio object
       self.options = None #initialized in _set_portfolio
