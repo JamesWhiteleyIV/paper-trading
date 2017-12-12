@@ -17,8 +17,9 @@ Installation
 =============
 Type the following into terminal:
 
-```zsh
-git clone https://github.com/JamesWhiteleyIV/Paper-Trading.git
-cd Paper-Trading
-pip install -r requirements.txt
-```
+.. code-block:: bash
+
+   $ git clone https://github.com/JamesWhiteleyIV/Paper-Trading.git
+   $ cd Paper-Trading
+   $ pip install -r requirements.txt
+   $ python papertrading/papertrading.py 
