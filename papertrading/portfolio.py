@@ -71,7 +71,7 @@ class Stock():
            self.data['cur_value'] = sell_price * self.data['shares']
            self.data['total_gain'] = (sell_price / self.data['buy_price'] - 1) * 100.0
         except Exception as e:
-           print e
+           pass
 
 
    def update(self):
@@ -89,7 +89,7 @@ class Stock():
               self.data['cur_value'] = cur_price * self.data['shares']
               self.data['total_gain'] = (cur_price / self.data['buy_price'] - 1) * 100.0
       except Exception as e:
-           print e
+           pass
 
 
    def _check_sell(self):
@@ -105,22 +105,24 @@ class Stock():
       except: #not enough data to calculate
          print 'invalid date range'
          return
-      if pt and (dt.date.today() - self.data['price_target_set_date']).days > 0:  #get all dates where pt was hit since pt was set , must have at least one holding day 
+      if pt and dt.date.today() > self.data['price_target_set_date']:  #get all dates where pt was hit since pt was set , must have at least one holding day 
          try:
             pt_set_date = self.data['price_target_set_date'] 
-            pt_dates = prices[prices['High'] > pt]
-            pt_dates = pt_dates.ix[pt_set_date:]
+            idx = prices.index.get_loc(pt_set_date)
+            pt_dates = prices.ix[idx+1:]
+            pt_dates = pt_dates[pt_dates['High'] > pt]
             pt_date = pt_dates.index[0]
          except Exception as e:
-            print e
-      if sl and (dt.date.today() - self.data['stop_loss_set_date']).days > 0:  #get all dates where sl was hit since sl was set  
+            pass
+      if sl and dt.date.today() > self.data['stop_loss_set_date']:  #get all dates where sl was hit since sl was set  
          try:
             sl_set_date = self.data['stop_loss_set_date'] 
-            sl_dates = prices[prices['Low'] < sl]
-            sl_dates = sl_dates.ix[sl_set_date:]
+            idx = prices.index.get_loc(sl_set_date)
+            sl_dates = prices.ix[idx+1:]
+            sl_dates = sl_dates[sl_dates['Low'] < sl]
             sl_date = sl_dates.index[0]
          except Exception as e:
-            print e        
+            pass       
          
       sold_date = None
       sell_price = None
@@ -320,7 +322,6 @@ class Portfolio():
             stock.update()
             if stock.data["is_sold"]: #price target or stop loss hit during update
                self.data['cash'] += stock.data['cur_value']
-               print 'TESTtestTEST'
                print colors.green + stock.data['ticker'] +  " sold from portfolio successfully" + colors.end
             else:
                self.data['cur_value'] += stock.data['cur_value']
