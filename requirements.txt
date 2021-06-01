@@ -12,5 +12,5 @@ requests-file==1.4.2
 requests-ftp==0.3.1
 six==1.11.0
 tabulate==0.8.2
-urllib3==1.22
+urllib3==1.26.5
 zope.interface==4.4.3
